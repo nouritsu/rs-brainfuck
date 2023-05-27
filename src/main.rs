@@ -5,10 +5,16 @@ use std::{
     process,
 };
 
+mod interpreter;
+mod lexer;
 mod tokens;
+
+use interpreter::Interpreter;
+use lexer::Lexer;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
+    let interpreter = Interpreter::new(3000000);
 
     if args.len() > 2 {
         println!("Usage: <executable> [script].");
@@ -41,5 +47,6 @@ fn run_prompt() {
 }
 
 fn run(src: String) {
-    todo!()
+    let mut lexer = Lexer::new(src);
+    println!("{:?}", lexer.scan());
 }

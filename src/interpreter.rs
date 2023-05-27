@@ -1,17 +1,19 @@
+use crate::tokens::Token;
+
 pub struct Interpreter {
-    arr: Vec<u64>,
-    ptr: u64,
+    arr: Vec<usize>,
+    ptr: usize,
 }
 
 impl Interpreter {
-    pub fn new(base_size: u64) -> Self {
+    pub fn new(base_size: usize) -> Self {
         Interpreter {
             arr: vec![0; base_size],
             ptr: 0,
         }
     }
 
-    pub fn interpret(self, l: List<Token>) {
+    pub fn interpret(self, l: Vec<Token>) {
         todo!()
     }
 }

@@ -1,9 +1,12 @@
-enum Token {
+#[derive(Debug)]
+pub enum Token {
     IncrementPtr,
     DecrementPtr,
     IncrementValue,
     DecrementValue,
-    Loop(Vec<Token>),
-    Read,
+    LoopBegin,
+    LoopEnd,
     Write,
+    Read,
+    Comment,
 }
