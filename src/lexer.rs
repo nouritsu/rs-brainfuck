@@ -1,17 +1,14 @@
 use crate::tokens::Token;
 
-pub struct Lexer {
-    text: String,
-}
+pub struct Lexer;
 
 impl Lexer {
-    pub fn new(text: String) -> Self {
-        Lexer { text }
+    pub fn new() -> Self {
+        Lexer
     }
 
-    pub fn scan(&mut self) -> Vec<Token> {
-        self.text
-            .chars()
+    pub fn scan(&mut self, text: String) -> Vec<Token> {
+        text.chars()
             .filter_map(|c| {
                 Some(match c {
                     '>' => Token::IncrementPtr,
