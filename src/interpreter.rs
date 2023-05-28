@@ -13,7 +13,15 @@ impl Interpreter {
         }
     }
 
-    pub fn interpret(self, l: Vec<Token>) {
-        todo!()
+    pub fn interpret(&mut self, tokens: Vec<Token>) -> Result<(), String> {
+        let mut current = 0;
+        match tokens.get(current) {
+            '>' => handle_increment_ptr(),
+            _ => {}
+        }
+
+        Ok(())
     }
+
+    fn handle_increment_ptr() {}
 }

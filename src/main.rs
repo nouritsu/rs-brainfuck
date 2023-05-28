@@ -14,11 +14,11 @@ use lexer::Lexer;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    let interpreter = Interpreter::new(3000000);
+    let interpreter = Interpreter::new(300000);
 
     if args.len() > 2 {
         println!("Usage: <executable> [script].");
-        process::exit(64);
+        process::exit(-1);
     } else if args.len() == 2 {
         run_file(args.get(1).unwrap().to_string());
     } else {
@@ -47,6 +47,6 @@ fn run_prompt() {
 }
 
 fn run(src: String) {
-    let mut lexer = Lexer::new(src);
-    println!("{:?}", lexer.scan());
+    let tokens = Lexer::new(src).scan();
+    println!("{:?}", tokens);
 }

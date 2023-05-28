@@ -6,7 +6,7 @@ pub enum Token {
     DecrementValue,
     LoopBegin,
     LoopEnd,
-    Write,
-    Read,
-    Comment,
+    PutChar,
+    GetChar,
+    End,
 }
