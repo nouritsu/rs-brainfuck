@@ -40,6 +40,7 @@ impl Interpreter {
             Token::DecrementValue => self.handle_decrement_value(),
             Token::PutChar => self.handle_put_char(),
             Token::GetChar => self.handle_get_char(),
+            Token::PrintStatus => self.handle_print_status(),
             _ => whatever!("Unkown token encountered."), //Unreachable
         }
     }
@@ -115,6 +116,10 @@ impl Interpreter {
     }
 
     fn handle_get_char(&mut self) -> Result<(), Whatever> {
+        todo!()
+    }
+
+    fn handle_print_status(&mut self) -> Result<(), Whatever> {
         todo!()
     }
 }

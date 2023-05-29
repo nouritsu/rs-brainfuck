@@ -19,6 +19,7 @@ impl Lexer {
                     ']' => Token::LoopEnd,
                     '.' => Token::PutChar,
                     ',' => Token::GetChar,
+                    '^' => Token::PrintStatus,
                     _ => return None, //filter other characters out
                 })
             })

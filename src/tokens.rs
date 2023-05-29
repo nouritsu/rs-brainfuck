@@ -8,5 +8,6 @@ pub enum Token {
     LoopEnd,
     PutChar,
     GetChar,
+    PrintStatus,
     End,
 }

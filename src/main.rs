@@ -54,6 +54,7 @@ fn run_prompt(interpreter: &mut Interpreter) {
         io::stdin()
             .read_line(&mut line)
             .expect("Unable to read line.");
+        // line.push('^');
         match run(interpreter, line) {
             Ok(_) => continue,
             Err(e) => perror(e.to_string()),
