@@ -60,8 +60,7 @@ fn run(interpreter: &mut Interpreter, src: String) -> Result<(), Whatever> {
             return Err(e);
         }
     };
-    interpreter.interpret(statements);
-    Ok(())
+    return interpreter.interpret(statements);
 }
 
 fn perror(msg: String) {
