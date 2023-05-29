@@ -12,6 +12,9 @@ impl Parser {
     }
 
     pub fn parse(&mut self, tokens: Vec<Token>) -> Result<Vec<Statement>, Whatever> {
+        if !self.check_braces(&tokens) {
+            whatever!("Unclosed loop encountered, close with ']'.")
+        }
         let mut statements = Vec::<Statement>::new();
         let mut iter = tokens.into_iter();
 
@@ -39,5 +42,21 @@ impl Parser {
             }
         }
         Ok(loop_body)
+    }
+
+    fn check_braces(&mut self, tokens: &Vec<Token>) -> bool {
+        let mut c: i32 = 0;
+        for token in tokens.iter() {
+            match token {
+                Token::LoopBegin => c += 1,
+                Token::LoopEnd => c -= 1,
+                _ => continue,
+            }
+
+            if c < 0 {
+                return false;
+            }
+        }
+        return c == 0;
     }
 }

@@ -2,7 +2,7 @@ use std::{
     env,
     fs::File,
     io::{self, Read, Write},
-    process,
+    process::{self, exit},
 };
 
 mod interpreter;
@@ -16,11 +16,11 @@ use colored::Colorize;
 use interpreter::Interpreter;
 use lexer::Lexer;
 use parser::Parser;
-use snafu::{prelude::*, Whatever};
+use snafu::Whatever;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    let mut interpreter = Interpreter::new(300000);
+    let mut interpreter = Interpreter::new(30);
 
     if args.len() > 2 {
         println!("Usage: <executable> [script].");
@@ -37,7 +37,13 @@ fn run_file(interpreter: &mut Interpreter, fname: String) {
     let mut data = String::new();
     file.read_to_string(&mut data)
         .expect("Unable to read data from file.");
-    run(interpreter, data);
+    match run(interpreter, data) {
+        Ok(_) => pok(String::from("Execution completed sucessfully.")),
+        Err(e) => {
+            perror(e.to_string());
+            exit(1)
+        }
+    }
 }
 
 fn run_prompt(interpreter: &mut Interpreter) {
@@ -48,7 +54,10 @@ fn run_prompt(interpreter: &mut Interpreter) {
         io::stdin()
             .read_line(&mut line)
             .expect("Unable to read line.");
-        run(interpreter, line);
+        match run(interpreter, line) {
+            Ok(_) => continue,
+            Err(e) => perror(e.to_string()),
+        }
     }
 }
 
@@ -63,6 +72,10 @@ fn run(interpreter: &mut Interpreter, src: String) -> Result<(), Whatever> {
     return interpreter.interpret(statements);
 }
 
+fn pok(msg: String) {
+    println!("\n[{}]: {}", "OK".green(), msg)
+}
+
 fn perror(msg: String) {
-    println!("[{}]: {}", "ERR".red(), msg)
+    println!("\n[{}]: {}", "ERR".red(), msg)
 }
