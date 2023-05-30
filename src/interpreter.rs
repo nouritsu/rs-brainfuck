@@ -104,7 +104,6 @@ impl Interpreter {
             Err(_) => whatever!("Unable to read from stdin."),
         }
         self.arr[self.ptr] = inp[0] as usize;
-        println!("Char: {}", inp[0]);
         Ok(())
     }
 
