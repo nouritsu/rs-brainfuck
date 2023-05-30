@@ -1,8 +1,7 @@
 use std::{
-    env,
     fs::File,
     io::{self, Read, Write},
-    process::{self, exit},
+    process::exit,
 };
 
 mod interpreter;
@@ -13,35 +12,54 @@ mod tokens;
 
 use colored::Colorize;
 
+use clap::Parser as ArgParser;
 use interpreter::Interpreter;
 use lexer::Lexer;
 use parser::Parser;
 use snafu::Whatever;
 
-fn main() {
-    let args: Vec<String> = env::args().collect();
-    let mut interpreter = Interpreter::new(30);
+#[derive(ArgParser, Debug)]
+#[command(author, version, about, long_about=None)]
+struct Args {
+    #[arg(short, long)]
+    file: Option<String>,
 
-    if args.len() > 2 {
-        println!("Usage: <executable> [script].");
-        process::exit(-1);
-    } else if args.len() == 2 {
-        run_file(&mut interpreter, args.get(1).unwrap().to_string());
+    #[arg(short, long, default_value_t = 30000)]
+    arrlen: usize,
+}
+
+fn main() {
+    let args = Args::parse();
+    let mut interpreter = Interpreter::new(args.arrlen);
+
+    if let Some(f) = args.file {
+        run_file(&mut interpreter, f);
     } else {
-        run_prompt(&mut interpreter);
+        run_prompt(&mut interpreter)
     }
 }
 
 fn run_file(interpreter: &mut Interpreter, fname: String) {
-    let mut file = File::open(fname).expect("Unable to open file.");
+    let mut file = match File::open(fname) {
+        Ok(f) => f,
+        Err(e) => {
+            perror(e.to_string());
+            exit(1)
+        }
+    };
     let mut data = String::new();
-    file.read_to_string(&mut data)
-        .expect("Unable to read data from file.");
+    match file.read_to_string(&mut data) {
+        Ok(_) => {}
+        Err(e) => {
+            perror(e.to_string());
+            exit(2)
+        }
+    }
     match run(interpreter, data) {
         Ok(_) => pok(String::from("Execution completed sucessfully.")),
         Err(e) => {
             perror(e.to_string());
-            exit(1)
+            exit(3)
         }
     }
 }
@@ -64,12 +82,7 @@ fn run_prompt(interpreter: &mut Interpreter) {
 
 fn run(interpreter: &mut Interpreter, src: String) -> Result<(), Whatever> {
     let tokens = Lexer::new().scan(src);
-    let statements = match Parser::new().parse(tokens) {
-        Ok(s) => s,
-        Err(e) => {
-            return Err(e);
-        }
-    };
+    let statements = Parser::new().parse(tokens)?;
     return interpreter.interpret(statements);
 }
 
