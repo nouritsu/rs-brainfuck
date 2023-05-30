@@ -44,7 +44,7 @@ fn run_file(interpreter: &mut Interpreter, fname: String) {
         Ok(f) => f,
         Err(e) => {
             perror(e.to_string());
-            exit(1)
+            exit(2)
         }
     };
     let mut data = String::new();
@@ -52,14 +52,14 @@ fn run_file(interpreter: &mut Interpreter, fname: String) {
         Ok(_) => {}
         Err(e) => {
             perror(e.to_string());
-            exit(2)
+            exit(1)
         }
     }
     match run(interpreter, data) {
         Ok(_) => pok(String::from("Execution completed sucessfully.")),
         Err(e) => {
             perror(e.to_string());
-            exit(3)
+            exit(-1)
         }
     }
 }
