@@ -1,8 +1,7 @@
 use snafu::{prelude::*, Whatever};
 
-use crate::statements::Statement;
+use crate::instructions::Instructions;
 use crate::tokens::Token;
-use std::vec::IntoIter;
 
 pub struct Parser;
 
@@ -11,52 +10,53 @@ impl Parser {
         Parser
     }
 
-    pub fn parse(&mut self, tokens: Vec<Token>) -> Result<Vec<Statement>, Whatever> {
-        if !self.check_braces(&tokens) {
-            whatever!("Unclosed loop encountered, close with ']'.")
-        }
-        let mut statements = Vec::<Statement>::new();
-        let mut iter = tokens.into_iter();
+    pub fn parse(&mut self, tokens: Vec<Token>) -> Result<Vec<Instructions>, Whatever> {
+        let mut instructions = Vec::new();
+        let mut loop_counter = 0;
+        let mut loop_start = 0;
 
-        while let Some(token) = iter.next() {
-            match token {
-                Token::End => break,
-                Token::LoopBegin => match self.handle_loop(&mut iter) {
-                    Ok(v) => statements.push(Statement::Loop(v)),
-                    Err(e) => return Err(e),
-                },
-                _ => statements.push(Statement::Expression(token)),
+        for (i, token) in tokens.iter().enumerate() {
+            if loop_counter == 0 {
+                let instruction = match token {
+                    Token::IncrementPtr => Some(Instructions::IncrementPtr),
+                    Token::DecrementPtr => Some(Instructions::DecrementPtr),
+                    Token::IncrementValue => Some(Instructions::IncrementValue),
+                    Token::DecrementValue => Some(Instructions::DecrementValue),
+                    Token::PutChar => Some(Instructions::PutChar),
+                    Token::GetChar => Some(Instructions::GetChar),
+                    Token::PrintStatus => Some(Instructions::PrintStatus),
+                    Token::LoopBegin => {
+                        loop_start = i;
+                        loop_counter += 1;
+                        None
+                    }
+                    Token::LoopEnd => whatever!("Unopened Loop encountered, open with '['."),
+                };
+
+                if let Some(instruction) = instruction {
+                    instructions.push(instruction);
+                }
+            } else {
+                match token {
+                    Token::LoopBegin => {
+                        loop_counter += 1;
+                    }
+                    Token::LoopEnd => {
+                        loop_counter -= 1;
+                        if loop_counter == 0 {
+                            instructions.push(Instructions::Loop(
+                                self.parse(tokens[loop_start + 1..i].to_vec())?,
+                            ));
+                        }
+                    }
+                    _ => {}
+                }
             }
         }
 
-        Ok(statements)
-    }
-
-    pub fn handle_loop(&mut self, iter: &mut IntoIter<Token>) -> Result<Vec<Token>, Whatever> {
-        let mut loop_body = Vec::new();
-        while let Some(token) = iter.next() {
-            match token {
-                Token::LoopEnd => break,
-                Token::End => whatever!("Unclosed Loop encountered, close with ']'."),
-                _ => loop_body.push(token),
-            }
+        if loop_counter != 0 {
+            whatever!("Unclosed Loop encountered, close with ']'.")
         }
-        Ok(loop_body)
-    }
-
-    fn check_braces(&mut self, tokens: &Vec<Token>) -> bool {
-        let mut c: i32 = 0;
-        for token in tokens.iter() {
-            match token {
-                Token::LoopBegin => c += 1,
-                Token::LoopEnd => c -= 1,
-                _ => continue,
-            }
-
-            if c < 0 {
-                return false;
-            }
-        }
-        return c == 0;
+        Ok(instructions)
     }
 }

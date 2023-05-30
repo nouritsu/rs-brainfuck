@@ -4,10 +4,10 @@ use std::{
     process::exit,
 };
 
+mod instructions;
 mod interpreter;
 mod lexer;
 mod parser;
-mod statements;
 mod tokens;
 
 use colored::Colorize;
@@ -83,7 +83,7 @@ fn run_prompt(interpreter: &mut Interpreter) {
 fn run(interpreter: &mut Interpreter, src: String) -> Result<(), Whatever> {
     let tokens = Lexer::new().scan(src);
     let statements = Parser::new().parse(tokens)?;
-    return interpreter.interpret(statements);
+    return interpreter.interpret(&statements);
 }
 
 fn pok(msg: String) {

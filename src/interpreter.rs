@@ -1,7 +1,6 @@
-use crate::statements::Statement;
-use crate::tokens::Token;
+use crate::instructions::Instructions;
 use snafu::{prelude::*, Whatever};
-use std::io::{self, Write};
+use std::io::{self, Read, Write};
 use std::usize;
 
 pub struct Interpreter {
@@ -17,43 +16,26 @@ impl Interpreter {
         }
     }
 
-    pub fn interpret(&mut self, statements: Vec<Statement>) -> Result<(), Whatever> {
-        for statement in statements.into_iter() {
-            let r = match statement {
-                Statement::Expression(e) => self.handle_expression(e),
-                Statement::Loop(body) => self.handle_loop(body),
-            };
-
-            match r {
-                Ok(_) => continue,
-                Err(e) => return Err(e),
-            }
+    pub fn interpret(&mut self, instructions: &Vec<Instructions>) -> Result<(), Whatever> {
+        for instruction in instructions {
+            match instruction {
+                Instructions::IncrementPtr => self.handle_increment_ptr(),
+                Instructions::DecrementPtr => self.handle_decrement_ptr(),
+                Instructions::IncrementValue => self.handle_increment_value(),
+                Instructions::DecrementValue => self.handle_decrement_value(),
+                Instructions::PutChar => self.handle_put_char(),
+                Instructions::GetChar => self.handle_get_char(),
+                Instructions::PrintStatus => self.handle_print_status(),
+                Instructions::Loop(body) => self.handle_loop(body),
+            }?
         }
         Ok(())
     }
 
-    fn handle_expression(&mut self, expr: Token) -> Result<(), Whatever> {
-        match expr {
-            Token::IncrementPtr => self.handle_increment_ptr(),
-            Token::DecrementPtr => self.handle_decrement_ptr(),
-            Token::IncrementValue => self.handle_increment_value(),
-            Token::DecrementValue => self.handle_decrement_value(),
-            Token::PutChar => self.handle_put_char(),
-            Token::GetChar => self.handle_get_char(),
-            Token::PrintStatus => self.handle_print_status(),
-            _ => whatever!("Unkown token encountered."), //Unreachable
-        }
-    }
-
-    fn handle_loop(&mut self, body: Vec<Token>) -> Result<(), Whatever> {
+    fn handle_loop(&mut self, body: &Vec<Instructions>) -> Result<(), Whatever> {
         let loop_idx = self.ptr;
         while self.arr[loop_idx] != 0 {
-            for stmt in body.iter() {
-                match self.handle_expression(*stmt) {
-                    Ok(_) => continue,
-                    Err(e) => return Err(e),
-                }
-            }
+            self.interpret(body)?
         }
         Ok(())
     }
@@ -116,7 +98,14 @@ impl Interpreter {
     }
 
     fn handle_get_char(&mut self) -> Result<(), Whatever> {
-        todo!()
+        let mut inp: [u8; 1] = [0; 1];
+        match io::stdin().read_exact(&mut inp) {
+            Ok(_) => {}
+            Err(_) => whatever!("Unable to read from stdin."),
+        }
+        self.arr[self.ptr] = inp[0] as usize;
+        println!("Char: {}", inp[0]);
+        Ok(())
     }
 
     fn handle_print_status(&mut self) -> Result<(), Whatever> {

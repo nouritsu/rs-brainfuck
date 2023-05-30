@@ -20,10 +20,9 @@ impl Lexer {
                     '.' => Token::PutChar,
                     ',' => Token::GetChar,
                     '^' => Token::PrintStatus,
-                    _ => return None, //filter other characters out
+                    _ => return None, //any other character is a comment
                 })
             })
-            .chain([Token::End])
             .collect::<Vec<Token>>()
     }
 }

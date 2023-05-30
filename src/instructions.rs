@@ -1,12 +1,11 @@
-#[derive(Debug, Clone)]
-pub enum Token {
+#[derive(Debug)]
+pub enum Instructions {
     IncrementPtr,
     DecrementPtr,
     IncrementValue,
     DecrementValue,
-    LoopBegin,
-    LoopEnd,
-    PutChar,
     GetChar,
+    PutChar,
     PrintStatus,
+    Loop(Vec<Instructions>),
 }
