@@ -109,9 +109,12 @@ fn run(interpreter: &mut Interpreter, src: String, show_time: bool) -> Result<()
     println!();
 
     if show_time {
-        pinfo(format!("Lexed string in: {:.3}s", lex_time));
-        pinfo(format!("Parsed tokens in: {:.3}s", parse_time));
-        pinfo(format!("Executed instructions in: {:.3}s", interpret_time));
+        pinfo(format!("Lexed tokens in: {:.3} seconds", lex_time));
+        pinfo(format!("Parsed tokens in: {:.3} seconds", parse_time));
+        pinfo(format!(
+            "Executed instructions in: {:.3} seconds",
+            interpret_time
+        ));
     }
 
     Ok(())
