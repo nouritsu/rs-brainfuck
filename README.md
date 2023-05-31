@@ -60,7 +60,7 @@ Internal Array (capacity: 30,000)
 ```
 This feature will autoexecute in the REPL.
 
-##~~Report time taken~~ Implemented!
+## ~~Report time taken~~ Implemented!
 Passing in a flag `-t` will report times taken for each process - Lexing, Parsing, Interpreting  
 Eg -
 ```
