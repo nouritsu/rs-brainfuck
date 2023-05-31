@@ -31,12 +31,14 @@ cargo install --path .
 After this, you should be able to run `rs-brainfuck.exe` (or `rs-brainfuck` if you're not on Windows) given that Cargo's bin path is in $PATH.
 
 # Usage
-There are two command line options that can modify the behaviour of the program.
+There are three command line options that can modify the behaviour of the program.
 | Short Option 	| Long Option 	|          Expects         	|                                    Effect                                    	|
 |:------------:	|:-----------:	|:------------------------:	|:----------------------------------------------------------------------------:	|
 |    <N.A.>    	|   --arrlen  	| usize (unsigned integer) 	|          Changes the size of the internal array. 30,000 by default.          	|
 |      -f      	|    --file   	|    String (file path)    	| Interprets file provided, if not provided interpreter will run in REPL mode. 	|
-There are 2 modes the interpreter can run in, file mode or REPL mode.
+|      -t      	|    --time   	| bool (just put the flag) 	|                 Shows time taken for each step of execution.                 	|
+There are 2 modes the interpreter can run in, file mode or REPL mode.  
+The time option will print time after each line in REPL mode.
 
 ## Errors
 All errors reported by the interpreter are descriptive and self explanatory.  
@@ -58,7 +60,7 @@ Internal Array (capacity: 30,000)
 ```
 This feature will autoexecute in the REPL.
 
-## Report time taken
+##~~Report time taken~~ Implemented!
 Passing in a flag `-t` will report times taken for each process - Lexing, Parsing, Interpreting  
 Eg -
 ```
