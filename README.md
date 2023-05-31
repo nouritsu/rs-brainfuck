@@ -37,6 +37,7 @@ There are three command line options that can modify the behaviour of the progra
 |    <N.A.>    	|   --arrlen  	| usize (unsigned integer) 	|          Changes the size of the internal array. 30,000 by default.          	|
 |      -f      	|    --file   	|    String (file path)    	| Interprets file provided, if not provided interpreter will run in REPL mode. 	|
 |      -t      	|    --time   	| bool (just put the flag) 	|                 Shows time taken for each step of execution.                 	|
+
 There are 2 modes the interpreter can run in, file mode or REPL mode.  
 The time option will print time after each line in REPL mode.
 
