@@ -21,7 +21,7 @@ use snafu::Whatever;
 
 #[derive(ArgParser, Debug)]
 #[command(author = "Aneesh B.", about, long_about=None)]
-#[command(version = "1.0.0")]
+#[command(version = "1.1.0")]
 #[command(about = "A fast, memory safe and powerful brainfuck interpreter.")]
 struct Args {
     #[arg(short, long)]
