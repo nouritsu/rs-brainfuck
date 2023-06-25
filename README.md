@@ -55,7 +55,7 @@ The time option will print time after each line in REPL mode.
 
 All errors reported by the interpreter are descriptive and self explanatory.  
 If the interpreter encounters an error in file mode, execution will stop the moment the error is caught and program will quit.  
-Errors caught in REPL mode will not cause the program to close, use `Ctrl-C` to close program from terminal.
+Errors caught in REPL mode will not cause the program to close, type "exit", "quit" or "q" in REPL mode to exit safely.
 
 # Planned Features
 
