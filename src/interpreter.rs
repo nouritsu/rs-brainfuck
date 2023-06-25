@@ -43,7 +43,7 @@ impl Interpreter {
     fn handle_increment_ptr(&mut self) -> Result<(), Whatever> {
         if self.arr.len() == 0 || self.ptr == self.arr.len() - 1 {
             whatever!(
-                "Unable to increment pointer past array size (size: {}).",
+                "RuntimeError: Unable to increment pointer past array size (size: {}).",
                 self.arr.len()
             )
         }
@@ -52,7 +52,7 @@ impl Interpreter {
     }
     fn handle_decrement_ptr(&mut self) -> Result<(), Whatever> {
         if self.ptr == 0 {
-            whatever!("Unable to decrement pointer below zero.")
+            whatever!("RuntimeError: Unable to decrement pointer below zero.")
         }
         self.ptr -= 1;
         Ok(())
@@ -61,7 +61,7 @@ impl Interpreter {
     fn handle_increment_value(&mut self) -> Result<(), Whatever> {
         if self.arr[self.ptr] == usize::MAX {
             whatever!(
-                "Unable to increment value, already at max (max: {}, ptr: {})",
+                "RuntimeError: Unable to increment value, already at max (max: {}, ptr: {})",
                 usize::MAX,
                 self.ptr
             )
@@ -73,7 +73,7 @@ impl Interpreter {
     fn handle_decrement_value(&mut self) -> Result<(), Whatever> {
         if self.arr[self.ptr] == usize::MIN {
             whatever!(
-                "Unable to decrement value, already at min (min: {}, ptr: {}).",
+                "RuntimeError: Unable to decrement value, already at min (min: {}, ptr: {}).",
                 usize::MIN,
                 self.ptr
             )
@@ -86,14 +86,14 @@ impl Interpreter {
         let c = match char::from_u32(self.arr[self.ptr] as u32) {
             Some(r) => r,
             None => whatever!(
-                "Cannot convert value to character (value: {}).",
+                "RuntimeError: Cannot convert value to character (value: {}).",
                 self.arr[self.ptr]
             ),
         };
         print!("{}", c);
         match io::stdout().flush() {
             Ok(_) => Ok(()),
-            Err(_) => whatever!("Unable to flush output buffer."),
+            Err(_) => whatever!("RuntimeError: Unable to flush output buffer."),
         }
     }
 
@@ -101,7 +101,7 @@ impl Interpreter {
         let mut inp: [u8; 1] = [0; 1];
         match io::stdin().read_exact(&mut inp) {
             Ok(_) => {}
-            Err(_) => whatever!("Unable to read from stdin."),
+            Err(_) => whatever!("RuntimeError: Unable to read from stdin."),
         }
         self.arr[self.ptr] = inp[0] as usize;
         Ok(())

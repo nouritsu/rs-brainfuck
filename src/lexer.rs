@@ -20,9 +20,9 @@ impl Lexer {
                     '.' => Token::PutChar,
                     ',' => Token::GetChar,
                     '^' => Token::PrintStatus,
-                    _ => return None, //any other character is a comment
+                    _ => return None,
                 })
             })
-            .collect::<Vec<Token>>()
+            .collect()
     }
 }

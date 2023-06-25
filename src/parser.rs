@@ -30,7 +30,9 @@ impl Parser {
                         loop_counter += 1;
                         None
                     }
-                    Token::LoopEnd => whatever!("Unopened Loop encountered, open with '['."),
+                    Token::LoopEnd => {
+                        whatever!("ParseError: Unopened Loop encountered, open with '['.")
+                    }
                 };
 
                 if let Some(instruction) = instruction {
@@ -55,7 +57,7 @@ impl Parser {
         }
 
         if loop_counter != 0 {
-            whatever!("Unclosed Loop encountered, close with ']'.")
+            whatever!("ParseError: Unclosed Loop encountered, close with ']'.")
         }
         Ok(instructions)
     }
