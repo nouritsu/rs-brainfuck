@@ -108,6 +108,31 @@ impl Interpreter {
     }
 
     fn handle_print_status(&mut self) -> Result<(), Whatever> {
-        todo!()
+        println!("-------------------------------------------------------------");
+        println!("Pointer at: {}, Array Size: {}", self.ptr, self.arr.len());
+        if self.ptr == 0 {
+            println!(
+                "[{}] [{}] [{}] ...",
+                self.arr[self.ptr],
+                self.arr[self.ptr + 1],
+                self.arr[self.ptr + 2]
+            );
+        } else if self.ptr == (self.arr.len() - 1) {
+            println!(
+                "... [{}] [{}] [{}]",
+                self.arr[self.ptr],
+                self.arr[self.ptr - 1],
+                self.arr[self.ptr - 2]
+            );
+        } else {
+            println!(
+                "... [{}] [{}] [{}] ...",
+                self.arr[self.ptr - 1],
+                self.arr[self.ptr],
+                self.arr[self.ptr + 1]
+            );
+        }
+        println!("-------------------------------------------------------------");
+        Ok(())
     }
 }

@@ -21,7 +21,7 @@ use snafu::Whatever;
 
 #[derive(ArgParser, Debug)]
 #[command(author = "Aneesh B.", about, long_about=None)]
-#[command(version = "1.1.0")]
+#[command(version = "1.2.0")]
 #[command(about = "A fast, memory safe and powerful brainfuck interpreter.")]
 struct Args {
     #[arg(short, long)]
@@ -36,6 +36,11 @@ struct Args {
 
 fn main() {
     let args = Args::parse();
+    if args.arrlen < 100 {
+        perror(String::from("Array length must be atleast 100"));
+        exit(0);
+    }
+
     let mut interpreter = Interpreter::new(args.arrlen);
     let now = Instant::now();
 
@@ -86,7 +91,16 @@ fn run_prompt(interpreter: &mut Interpreter, show_time: bool) {
         io::stdin()
             .read_line(&mut line)
             .expect("Unable to read line.");
-        // line.push('^');
+
+        if line.starts_with("quit") || line.starts_with("exit") || line.starts_with("q") {
+            pok(String::from("Exiting..."));
+            exit(0)
+        }
+
+        if !line.contains("^") {
+            line.push('^');
+        }
+
         match run(interpreter, line, show_time) {
             Ok(_) => continue,
             Err(e) => perror(format!("\n{}", e.to_string())),
