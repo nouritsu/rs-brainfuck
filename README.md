@@ -10,6 +10,7 @@ The 8 characters each perform a single operation on a massive 30,000 element lon
 The operations are as follows [[Source]](https://gist.github.com/roachhd/dce54bec8ba55fb17d3a) -
 
 ```brainfuck
+Original -
 > = increases memory pointer, or moves the pointer to the right 1 block.
 < = decreases memory pointer, or moves the pointer to the left 1 block.
 + = increases value stored at the block pointed to by the memory pointer
@@ -18,6 +19,11 @@ The operations are as follows [[Source]](https://gist.github.com/roachhd/dce54be
 ] = if block currently pointed to's value is not zero, jump back to [
 , = like c getchar(). input 1 character.
 . = like c putchar(). print 1 character to the console
+```
+
+```brainfuck
+Additions -
+^ - Prints 3 blocks around and including current pointer location (see end of doc for more)
 ```
 
 Any other characters apart from these 8 are ignored and treated as comments in the original language implementation.
