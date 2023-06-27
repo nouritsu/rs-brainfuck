@@ -66,6 +66,9 @@ Errors caught in REPL mode will not cause the program to close, type "exit", "qu
 
 # Planned Features
 
+## Using [chumsky](https://docs.rs/chumsky/latest/chumsky/) for parsing
+This will allow for better error messages and shorter, more readable code.
+
 ## ~~The ^ operator~~ Implemented in 1.2.0!
 
 The operator will print the current status of the program similar to this -
