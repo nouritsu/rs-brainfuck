@@ -2,28 +2,29 @@
 
 This project is an extremely powerful, fast and memory safe interpreter for the iconic language '[brainfuck](https://esolangs.org/wiki/Brainfuck)'.  
 The entire language is written using only 8 characters - `<>[]+-,.`  
-Note that there are a few more operators that have been (or are being) worked on as a sort of extension to brainfuck (think of it as bf++ :D)
+Note that there are a few more operators that have been (or are being) worked on as a sort of extension to brainfuck (think of it as bf++ :D).
 
 # Introduction
 
-The 8 characters each perform a single operation on a massive 30,000 element long array of unsigned integers (usize).  
+Brainfuck programs consist of a large array being zero-initialised in memory, along with a pointer to the first element of the array. The values stored in the array are all unsigned integers (usize), and by default the array's size is 30,000 elements.
+Each of the 8 characters performs a single operation on the array.
 The operations are as follows [[Source]](https://gist.github.com/roachhd/dce54bec8ba55fb17d3a) -
 
 ```brainfuck
 Original -
-> = increases memory pointer, or moves the pointer to the right 1 block.
-< = decreases memory pointer, or moves the pointer to the left 1 block.
-+ = increases value stored at the block pointed to by the memory pointer
-- = decreases value stored at the block pointed to by the memory pointer
-[ = like c while(cur_block_value != 0) loop.
-] = if block currently pointed to's value is not zero, jump back to [
-, = like c getchar(). input 1 character.
-. = like c putchar(). print 1 character to the console
+> = increases array pointer, or moves the pointer to the right 1 block.
+< = decreases array pointer, or moves the pointer to the left 1 block.
++ = increases value stored at the block pointed to by the array pointer.
+- = decreases value stored at the block pointed to by the array pointer.
+[ = like c while(current_block_value != 0) loop.
+] = if value stored at block currently pointed to by the array pointer is not zero, jump back to [. else continue to the next operation.
+, = like c getchar(). input 1 character and store its ASCII value in the block currently pointed to by the array pointer.
+. = like c putchar(). print the character indicated by the ASCII encoding of the value in the current block.
 ```
 
 ```brainfuck
 Additions -
-^ - Prints 3 blocks around and including current pointer location (see end of doc for more)
+^ - Prints 3 blocks around and including current pointer location (see end of doc for more).
 ```
 
 Any other characters apart from these 8 are ignored and treated as comments in the original language implementation.
@@ -80,7 +81,7 @@ This feature will autoexecute in the REPL.
 
 ## ~~Report time taken~~ Implemented in 1.1.0!
 
-Passing in a flag `-t` will report times taken for each process - Lexing, Parsing, Interpreting  
+Passing in a flag `-t` will report the time taken for each process - Lexing, Parsing, Interpreting  
 Eg -
 
 ```
